@@ -6,8 +6,8 @@ class Game:
         pass
 
 class Player:
-    def __init__(self, number, score=0, can_play=True) -> None:
-        self.number = number
+    def __init__(self, name, score=0, can_play=True) -> None:
+        self.name = f"Joueur {name}"
         self.score = score
         self.hand = set()
         self.can_play = can_play
@@ -27,7 +27,7 @@ class Player:
         return pile
 
     def __repr__(self) -> str:
-        return f"Joueur {self.number}; score actuel: {self.score}; main: {self.hand}"
+        return f"{self.name}; score actuel: {self.score}; main: {self.hand}"
 
 class Domino:
     def __init__(self, left_face=rdm.randint(0,6), right_face=rdm.randint(0,6)):
@@ -56,32 +56,38 @@ while True:
 
     for round in range(1, round_count+1): #loop for rounds
         pile = pile_generation(Domino)
-        chaine = []
+        chain = []
         
         for player in players:
             player.draw(initial_draw)
 
         players_round = player_order(players)
-        chaine.append(get_biggest_domino(players_round[0].hand))
+        chain.append(get_biggest_domino(players_round[0].hand))
 
-        cant_play_sum = 0
-        turn = 1
-        while cant_play_sum < player_count: #loop for turns in round
+        cant_play = [False for i in range(player_count)]
+        turn = 1 #on commence au deuxième joueurs car le premier a déjà placé son domino
+        while not all(cant_play): #loop for turns in round
             current_player = players_round[turn % player_count]
-            
+            if can_play(chain, current_player.hand):
+                cant_play[turn%player_count] = False
 
-            for player in players:
-                if len(player.hand) == 0:
-                    print(f"Joueur {player.number} remporte la manche")
-                    break
-                elif player.can_play != True:
-                    cant_play_sum += 1
+            else:
+                current_player.draw()
+                if can_play(chain, current_player.hand):
+                    continue
+                else:
+                    cant_play[turn%player_count] = True
+
             
-            turn 
-        
+            print(f"Fin du tour de {current_player.name}")
+            # for player in players:
+            #     if len(player.hand) == 0:
+            #         print(f"Joueur {player.number} remporte la manche")
+            #         break
+            #     elif player.can_play != True:
+            #         cant_play_sum += 1
+                    
         players = score_addition(players)
     break
 
-
-
-3 % 4
+print(not all([False, True]))

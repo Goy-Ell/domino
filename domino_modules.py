@@ -84,3 +84,12 @@ def get_biggest_domino(hand):
             biggest_domino_value = current_domino_value
 
     return biggest_domino_value
+
+def can_play(chain, hand):
+    for domino in hand:
+        if domino.left_face in str([chain[0], chain[-1]]) or domino.right_face in str([chain[0], chain[-1]]):
+            return True
+        else:
+            print(f"Ne peut pas jouer! Pioche d'un domino:")
+            return False
+        
