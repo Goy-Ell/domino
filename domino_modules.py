@@ -11,6 +11,7 @@ def test_domino(Class, random=True, l_f=None, r_f=None):
     return "End"
 
 def input_int(min, max):
+    valid_input = None
     while valid_input != None:
         initial_input = input()
         if isinstance(initial_input, int) and min <= initial_input <= max:
@@ -47,3 +48,39 @@ def initial_draw_finder(nb_player):
         initial_draw = 4
     
     return initial_draw
+
+def score_addition(players):
+    for player in players:
+        round_score = 0
+        for domino in player.hand:
+            round_score += domino.total_value
+        player.score += round_score
+
+    return players
+
+def player_order(players):
+    previous_biggest_domino_value = 0
+
+    for player in players:
+        biggest_domino_value = 0
+        
+        for domino in player.hand:
+            current_domino_value = domino.total_value()
+            if current_domino_value > biggest_domino_value:
+                biggest_domino_value = current_domino_value
+
+        if biggest_domino_value > previous_biggest_domino_value:
+            previous_biggest_domino_value = biggest_domino_value
+            first_player = player
+
+    players.insert(0, players.pop(players.index(first_player)))
+
+    return players
+
+def get_biggest_domino(hand):
+    for domino in hand:
+        current_domino_value = domino.total_value()
+        if current_domino_value > biggest_domino_value:
+            biggest_domino_value = current_domino_value
+
+    return biggest_domino_value
