@@ -10,17 +10,6 @@ def test_domino(Class, random=True, l_f=None, r_f=None):
 
     return "End"
 
-def input_int(min, max):
-    valid_input = None
-    while valid_input != None:
-        initial_input = input(f"Veuillez entrez un chiffre entre {min} et {max}")
-        if isinstance(initial_input, int) and min <= initial_input <= max:
-            valid_input = initial_input
-        else:
-            print(f"Entrée non valide, ré-entrer un chiffre entre {min} et {max} svp")
-
-    return valid_input
-
 def players_generation(nb_player, Class):
     list_players = []
 
@@ -78,6 +67,7 @@ def player_order(players):
     return players
 
 def get_biggest_domino(hand):
+    biggest_domino_value = 0
     for domino in hand:
         current_domino_value = domino.total_value()
         if current_domino_value > biggest_domino_value:
@@ -87,18 +77,18 @@ def get_biggest_domino(hand):
 
 def can_play(hand, chain):
     for domino in hand:
-        if (domino.left_face in str([chain[0], chain[-1]])) or (domino.right_face in str([chain[0], chain[-1]])) or (0 in [domino.left_face,domino.right_face]):
+        if (str(domino.left_face) in str([chain[0], chain[-1]])) or (str(domino.right_face) in str([chain[0], chain[-1]])) or ("0" in [domino.left_face,domino.right_face]):
             return True
     print(f"Ne peut pas jouer! Pioche d'un domino:")
     return False
         
-def valid_input(accepted_input, ask_sentence="Veuillez choisir une des réponses suivantes: {}: "):    
-    user_input = input(ask_sentence.format(accepted_input))
-    if user_input in accepted_input:
+def valid_input(accepted_inputs, ask_sentence="Veuillez choisir une des réponses suivantes: {}: "):    
+    user_input = input(ask_sentence.format(accepted_inputs))
+    if user_input in str(accepted_inputs):
         return user_input
     else:
         print("Réponse invalide")
-        valid_input(accepted_input, ask_sentence)
+        valid_input(accepted_inputs, ask_sentence)
 
 def play(chain, player):
     """
@@ -109,7 +99,7 @@ def play(chain, player):
     print(f"Voici la chaîne: {chain}")
     print(f"voici votre main: {player.hand}, quel pièce voulez vous jouer ?")
 
-    choosed_domino = player.hand[input_int(1, len(player.hand))]
+    choosed_domino = player.hand[valid_input(list(range(1, len(player.hand))))]
 
     if valid_input(['G', 'D'], "Quel face ? ({})") == 'G':
         face = 'G'
