@@ -34,11 +34,17 @@ class Domino:
         self.left_face = left_face
         self.right_face = right_face
 
+        if left_face == right_face:
+            self.double = True
+        else:
+            self.double = False
+
     def total_value(self):
         return self.left_face + self.right_face
 
     def swap_faces(self):
-        return f"{self.right_face}:{self.left_face}"
+        # return f"{self.right_face}:{self.left_face}"
+        return Domino(self.right_face, self.left_face)
 
     def __repr__(self):
         return f"{self.left_face}:{self.right_face}"
@@ -47,7 +53,7 @@ class Domino:
 
 while True:
     print("Début de la partie de domino\nQuel est le nombre de joueurs ?")
-    player_count = input_int(2, 6)
+    player_count = valid_input(range(2, 7))
     initial_draw = initial_draw_finder(player_count)
     players = players_generation(player_count, Player)
 
@@ -78,17 +84,14 @@ while True:
                 else:
                     cant_play[turn%player_count] = True
 
+            play(chain, current_player)
 
-            
+            if len(current_player.hand) == 0:
+                print(f"{current_player.name} n'a plus de dominos, fin de la manche!")
+                break
             print(f"Fin du tour de {current_player.name}")
-            # for player in players:
-            #     if len(player.hand) == 0:
-            #         print(f"Joueur {player.number} remporte la manche")
-            #         break
-            #     elif player.can_play != True:
-            #         cant_play_sum += 1
-                    
+
         players = score_addition(players)
     break
 
-print(not all([False, True]))
+print(range(7))

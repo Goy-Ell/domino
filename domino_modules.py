@@ -87,18 +87,53 @@ def get_biggest_domino(hand):
 
 def can_play(hand, chain):
     for domino in hand:
-        if domino.left_face in str([chain[0], chain[-1]]) or domino.right_face in str([chain[0], chain[-1]]):
+        if (domino.left_face in str([chain[0], chain[-1]])) or (domino.right_face in str([chain[0], chain[-1]])) or (0 in [domino.left_face,domino.right_face]):
             return True
-        else:
-            print(f"Ne peut pas jouer! Pioche d'un domino:")
-            return False
+    print(f"Ne peut pas jouer! Pioche d'un domino:")
+    return False
         
+def valid_input(accepted_input, ask_sentence="Veuillez choisir une des réponses suivantes: {}: "):    
+    user_input = input(ask_sentence.format(accepted_input))
+    if user_input in accepted_input:
+        return user_input
+    else:
+        print("Réponse invalide")
+        valid_input(accepted_input, ask_sentence)
+
 def play(chain, player):
+    """
+    chain: liste de classe Domino
+    player: classe Player
+    """
+    
     print(f"Voici la chaîne: {chain}")
     print(f"voici votre main: {player.hand}, quel pièce voulez vous jouer ?")
+
     choosed_domino = player.hand[input_int(1, len(player.hand))]
-    end = input("Le placer à quel fin ? (Queue/Tete")
-    face = input("Et pour finir, quel face ? (G/D")
 
-    if 
+    if valid_input(['G', 'D'], "Quel face ? ({})") == 'G':
+        face = 'G'
+        choosed_domino_face = choosed_domino.left_face
+    else:
+        face = 'D'
+        choosed_domino_face = choosed_domino.right_face
 
+    if valid_input(['Queue', 'Tête'], "Le placer à quel fin ? ({})") == "Queue":
+        end = 0
+        choosed_chain_face = chain[end].left_face
+    else:
+        end = -1
+        choosed_chain_face = chain[end].right_face
+
+    if choosed_domino_face == choosed_chain_face or choosed_domino_face == 0:
+        if end == 0:
+            chain.insert(end, choosed_domino)
+        else:
+            chain.append(choosed_domino)
+        player.hand.remove(choosed_domino)
+        return chain, player
+    else:
+        print("Mouvement invalide!")
+        play(chain, player)
+
+    
