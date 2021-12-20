@@ -6,11 +6,11 @@ class Game:
         pass
 
 class Player:
-    def __init__(self, name, score=0, can_play=True) -> None:
-        self.name = f"Joueur {name}"
-        self.score = score
-        self.hand = set()
-        self.can_play = can_play
+    def __init__(self, player_number) -> None:
+        self.name = f"Joueur {player_number}"
+        self.score = 0
+        self.hand = []
+        self.can_play = True
 
     def clear_hand(self):
         self.hand = []
@@ -65,7 +65,7 @@ while True:
         chain.append(get_biggest_domino(players_round[0].hand))
 
         cant_play = [False for i in range(player_count)]
-        turn = 1 #on commence au deuxième joueurs car le premier a déjà placé son domino
+        turn = 1 #on commence au deuxième joueur car le premier a déjà placé son domino
         while not all(cant_play): #loop for turns in round
             current_player = players_round[turn % player_count]
             if can_play(chain, current_player.hand):
@@ -77,6 +77,7 @@ while True:
                     continue
                 else:
                     cant_play[turn%player_count] = True
+
 
             
             print(f"Fin du tour de {current_player.name}")
